@@ -1,79 +1,27 @@
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 import React from 'react';
-import home from './pages/home';
-import CronotipoMunique from './pages/CronotipoMunique';
-import form from './pages/form';
-import Edinburgh from './pages/Edinburgh';
-import beck1 from './pages/Escala1Beck';
-import EscalaAnsiedade from './pages/EscalaAnsiedade';
-import EscalaAtencao from './pages/EscalaAtencao';
-import Ostberg from './pages/Ostberg';
-import Pisttsburgh from './pages/pisttsburgh';
-
+import Login from './pages/login';
+import Tarefa from './pages/tarefas';
+import ListaTarefa from './pages/ListaTarefa';
 const Router = createStackNavigator({
-  'home': {
-    screen: home,
-    path: 'home/:home',
+  'Login': {
+    screen: Login,
     navigationOptions: {
-      title: 'Bem Vindo',
+      title: 'Autenticação',
     }
   },
-  'beck1': {
-    screen: beck1,
-    path: 'beck/:beck',
+  'Tarefa': {
+    screen: Tarefa,
     navigationOptions: {
-      title: 'Escala 1 de beck',
+      title: 'Criar Tarefa',
     }
   },
-  'CronotipoMunique': {
-    screen: CronotipoMunique,
-    path: 'munique/:munique',
+  'ListaTarefa': {
+    screen: ListaTarefa,
     navigationOptions: {
-      title: 'Escala',
+      title: 'Criar Tarefa',
     }
   },
-  'EscalaAnsiedade': {
-    screen: EscalaAnsiedade,
-    path: 'ansiedade/:ansiedade',
-    navigationOptions: {
-      title: 'Escala de Ansiedade',
-    }
-  },
-  'EscalaAtencao': {
-    screen: EscalaAtencao,
-    path: 'atencao/:atencao',
-    navigationOptions: {
-      title: 'Escala de Ansiedade',
-    }
-  },
-  'Ostberg': {
-    screen: Ostberg,
-    path: 'ostberg/:ostberg',
-    navigationOptions: {
-      title: 'Escala Ostberg',
-    }
-  },
-  'form': {
-    screen: form,
-    navigationOptions: {
-      title: 'Formulario',
-    }
-  },
-  'Edinburgh': {
-    screen: Edinburgh,
-    path: 'edinburgh/:edinburgh',
-    navigationOptions: {
-      title: 'Edinburgh',
-    }
-  },
-  'Pisttsburgh': {
-    screen: Pisttsburgh,
-    path: 'pisttsburgh/:pisttsburgh',
-    navigationOptions: {
-      title: 'pisttsburgh',
-    }
-  },
-
 },
   {
     navigationOptions: {
@@ -87,5 +35,5 @@ const Router = createStackNavigator({
 
 const prefix = (Platform.OS === 'ios')
   ? 'https://'
-  : 'https://www.nitlab.com/';
+  : 'https://www.google.com/';
 export default () => <Router uriPrefix={prefix} />;
