@@ -1,0 +1,789 @@
+import React, { Component } from 'react';
+import firebase from 'firebase';
+import {
+  Linking,
+  Share,
+  View,
+  Button,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TextInput
+} from 'react-native';
+import DatePicker from 'react-native-datepicker'
+var question = []
+
+export default class pages extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      // respostas: [],
+      pergunta1: '00:00',
+      pergunta2: '00:00',
+      pergunta3: '00:00',
+      pergunta4: null,
+      pergunta5: '05:00',
+      pergunta6: '00:00',
+      pergunta7: '00:00',
+      pergunta8: '00:00',
+      pergunta9: '00:00',
+      pergunta10: '00:00',
+      pergunta11: '05:00',
+      pergunta12: '00:00',
+      nome: '',
+      idPesquisador: '00:00',
+      foraTrab: '00:00',
+      diaTrab: '00:00'
+      // date: "",
+    }
+  }
+  onShare = async () => {
+    try {
+      const { currentUser } = firebase.auth();
+      const id = currentUser.uid;
+      const result = await Share.share({
+        message:
+          `https://www.nitlab.com/munique/${id}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  onAddItem = () => {
+    // not allowed AND not working
+    this.setState(state => {
+      const list = state.respostas.push(state.value);
+      return {
+        list,
+        value: '',
+      };
+    });
+  };
+
+  // async cad() {
+  //   const { pesquisador, nome, pergunta1, pergunta2, pergunta3, pergunta4, pergunta5, pergunta6 } = this.state;
+  //   // const no = nome
+  //   const respostas = {
+  //     pergunta01: `Vou para a cama às ${pergunta1} horas`,
+  //     pergunta2,
+  //     pergunta03: `Às ${pergunta3} horas, estou pronto para dormir`,
+  //     pergunta04: `Necessito de ${pergunta4} minutos para adormecer`,
+  //     pergunta05: `Acordo às ${pergunta5} horas`,
+  //     pergunta06: `Passados ${pergunta6} minutos acordo`,
+  //     pesquisador: 'Jacks'
+  //   }
+  //   const dados = {
+  //     cpf: `07376714324`,
+  //     dataNasci: '26/10/1996',
+  //     CidadeOrig: 'Parnaíba',
+  //     peso: '65 kg',
+  //     altura: '1.72',
+  //     email: 'Danrleysil46@gmail.com',
+  //     Telefone: '86 995430844',
+  //     Curso: 'Sistemas de informação',
+  //     periodo: 6,
+  //     dataColeta: '10/12/2019',
+  //   }
+  //   // console.log(respostas)
+  //   const db = firebase.database();
+  //   await db.ref(`/${pesquisador}/CronotipoMunique/${nome}/respostas`).set(respostas)
+  //   await db.ref(`/${pesquisador}/CronotipoMunique/${nome}/dados`).set(dados)
+  //   await db.ref(`/CronotipoMunique/${nome}/resposta`).set(respostas)
+  //   await db.ref(`/CronotipoMunique/${nome}/dados`).set(dados)
+  // }
+
+
+  async cad() {
+    const { pesquisador, nome, pergunta1, pergunta2, pergunta3, pergunta4, pergunta5, pergunta6, pergunta7, pergunta8, pergunta9, pergunta10, pergunta11, pergunta12, foraTrab, diaTrab } = this.state;
+    // const no = nome
+    // question = {
+    //   0: { question: `Vou para a cama às ${pergunta1} horas` },
+    //   1: { question: pergunta2 },
+    //   2: { question: `Às ${pergunta3} horas, estou pronto para dormir` },
+    //   3: { question: `Necessito de ${pergunta4} minutos para adormecer` },
+    //   4: { question: `Acordo às ${pergunta5} horas` },
+    //   5: { question: `Passados ${pergunta6} minutos acordo` },
+    //   6: { question: `Vou para a cama às ${pergunta7} horas` },
+    //   7: { question: '' },
+    //   8: { question: `Às ${pergunta9} horas, estou pronto para dormir` },
+    //   9: { question: `Necessito de ${pergunta10} minutos para adormecer` },
+    //   10: { question: `Acordo às ${pergunta11} horas` },
+    //   11: { question: `Passados ${pergunta12} minutos acordo` },
+    //   12: { question: `Nos Dias de Trabalho ${diaTrab}` },
+    //   12: { question: `Fora Dos Dias de Trabalho ${foraTrab}` },
+    // }
+    var s = pergunta3.split(':');
+    // var e = pergunta4.split(':');
+
+    // var end = parseInt(e[0]) * 60 + parseInt(e[1]);
+    var start = parseInt(s[0]) * 60 + parseInt(s[1]);
+
+    var Sosent = (((start - pergunta4) - 1440) / 60) * -1;
+    var sign = Sosent >= 0 ? 1 : -1;
+    var min = 1 / 60;
+
+    // Get positive value of num
+    Sosent = Sosent * sign;
+
+    // Separate the int from the decimal part
+    var intpart = Math.floor(Sosent);
+    var decpart = Sosent - intpart;
+
+    // Round to nearest minute
+    decpart = min * Math.round(decpart / min);
+
+    var minutes = Math.floor(decpart * 60);
+
+    // Sign result
+    sign = sign == 1 ? '' : '-';
+
+    // pad() adds a leading zero if needed
+    // return sign + intpart + 'h' + pad(minutes, 2);
+    console.log(sign + intpart + 'h' + minutes);
+    // console.log(Sosent)
+    // var hours = Math.floor(Sosent);
+    // var minutes = Math.round((Sosent % 1) * 100) / 100;
+
+    // console.log(hours + ':' + minutes * 60 + '0');
+    // return elapsedMs;
+    // const Sosent = Date.parse(pergunta3) - Date.parse(pergunta4)
+    // Date.parse(pergunta4)
+    // console.log(Sosent / 60)
+    // const respostas = {
+    //   question,
+    //   idPesquisador: this.state.idPesquisador
+    // }
+    // console.log(question)
+    // await this.props.navigation.replace('form', {
+    //   respostas: respostas,
+    //   rota: 'CronotipoMunique'
+    // })
+  }
+  render() {
+    const { navigation } = this.props;
+    const { nome } = navigation.state.params;
+    const { params } = this.props.navigation.state;
+    this.state.idPesquisador = params.munique
+    this.state.nome = 'danrley'
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.inic}>
+            <Text style={styles.textTrue}>Você tem um horário regular de {'\n'}trabalho
+          (também como dono(a){'\n'} de casa, etc)?</Text>
+          </View>
+          <View style={styles.diaTrab}>
+            <Text style={{
+              fontSize: 16, fontWeight: 'bold', color: '#fff',
+              margin: 10
+            }}>
+              Nos dias de trabalho(incluindo a{'\n'}noite anterior ao primeiro trabalho)
+            </Text>
+          </View>
+          {/* <--pergunta 01--> */}
+          {/* <Image
+              style={styles.logo}
+              source={sleep}
+              aspectRatio={1}
+            // resizeMode='stretch'
+            /> */}
+          <View style={styles.perguntas}>
+
+            <Text style={styles.textPerg}>Vou para a cama às</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta1}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta1: date }) }}
+            />
+            <Text style={styles.textPerg}>horas</Text>
+          </View>
+          {/* <--pergunta 02--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Algumas pessoas permanecem algum{'\n'}tempo acordadas depois de se deitar!</Text>
+            {/* <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              autoCapitalize='none'
+              placeholder=''
+              placeholderTextColor='#999'
+              value={this.state.pergunta1}
+              onChangeText={pergunta2 => this.setState({ pergunta2 })}
+            /> */}
+            <Text style={styles.textPerg}></Text>
+          </View>
+          {/* <--pergunta 02--> */}
+          {/* <--pergunta 03--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Às</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta3}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta3: date }) }}
+            />
+            <Text style={styles.textPerg}>horas, estou pronto para dormir</Text>
+          </View>
+          {/* <--pergunta 04--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Necessito de</Text>
+            <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              autoCapitalize='none'
+              placeholder=''
+              keyboardType={'numeric'}
+              placeholderTextColor='#999'
+              value={this.state.pergunta4}
+              onChangeText={pergunta4 => this.setState({ pergunta4 })}
+            />
+            {/* <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta4}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta4: date }) }}
+            /> */}
+            <Text style={styles.textPerg}>minutos para adormecer</Text>
+          </View>
+          {/* <--pergunta 04--> */}
+          {/* <--pergunta 05--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Acordo às</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta5}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta5: date }) }}
+            />
+            <Text style={styles.textPerg}>horas</Text>
+          </View>
+          {/* <--pergunta 05--> */}
+          {/* <--pergunta 06--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Passados</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta6}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta6: date }) }}
+            />
+            <Text style={styles.textPerg}>minutos, levanto-me</Text>
+          </View>
+          {/* <--pergunta 06--> */}
+          <View style={styles.diaTrab}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff', textAlign: 'justify', margin: 10 }}>
+              Fora dos dias de trabalho(incluindo a noite anterior ao primeiro dia de descanso ou lazer)
+            </Text>
+          </View>
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Vou para a cama às</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta7}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta7: date }) }}
+            />
+            <Text style={styles.textPerg}>horas</Text>
+          </View>
+          {/* <--pergunta 02--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Algumas pessoas permanecem algum{'\n'}tempo acordadas depois de se deitar!</Text>
+            {/* <TextInput
+              style={styles.input}
+              autoCorrect={false}
+              autoCapitalize='none'
+              placeholder=''
+              placeholderTextColor='#999'
+              value={this.state.pergunta1}
+              onChangeText={pergunta2 => this.setState({ pergunta2 })}
+            /> */}
+            <Text style={styles.textPerg}></Text>
+          </View>
+          {/* <--pergunta 02--> */}
+          {/* <--pergunta 03--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Às</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta9}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta9: date }) }}
+            />
+            <Text style={styles.textPerg}>horas, estou pronto para dormir</Text>
+          </View>
+          {/* <--pergunta 04--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Necessito de</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta10}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta10: date }) }}
+            />
+            <Text style={styles.textPerg}>minutos para adormecer</Text>
+          </View>
+          {/* <--pergunta 04--> */}
+          {/* <--pergunta 05--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Acordo às</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta11}
+              androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta11: date }) }}
+            />
+            <Text style={styles.textPerg}>horas</Text>
+          </View>
+          {/* <--pergunta 05--> */}
+          {/* <--pergunta 06--> */}
+          <View style={styles.perguntas}>
+            <Text style={styles.textPerg}>Passados</Text>
+            <DatePicker
+              style={{ width: 80 }}
+              date={this.state.pergunta12}
+              // androidMode="spinner"
+              mode='time'
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderColor: '#fff',
+                  // marginHorizontal: 10
+                },
+                dateText: {
+                  color: '#fff',
+                  textAlign: 'center',
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => { this.setState({ pergunta12: date }) }}
+            />
+            <Text style={styles.textPerg}>minutos, levanto-me</Text>
+          </View>
+          {/* <--pergunta 06--> */}
+          <View style={styles.view}>
+            <View style={styles.diaTrab}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#fff', textAlign: 'justify', margin: 10 }}>
+                Em média, quanto tempo por dia você passa exposto a luz do dia (ao ar livre)?
+            </Text>
+            </View>
+            {/* <--pergunta 06--> */}
+            <View style={styles.perguntas}>
+              <Text style={styles.textPerg}>Nos Dias de Trabalho</Text>
+              <DatePicker
+                style={{ width: 80 }}
+                date={this.state.diaTrab}
+                androidMode="spinner"
+                mode='time'
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    position: 'absolute',
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 36,
+                    borderColor: '#fff',
+                    // marginHorizontal: 10
+                  },
+                  dateText: {
+                    color: '#fff',
+                    textAlign: 'center',
+                  },
+                  // ... You can check the source to find the other keys.
+                }}
+                onDateChange={(date) => { this.setState({ diaTrab: date }) }}
+              />
+            </View>
+            {/* <--pergunta 06--> */}
+
+            {/* <--pergunta 06--> */}
+            <View style={styles.perguntas}>
+              <Text style={styles.textPerg}>Fora Dos Dias de Trabalho</Text>
+              <DatePicker
+                style={{ width: 80 }}
+                date={this.state.diaTrab}
+                androidMode="spinner"
+                mode='time'
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    position: 'absolute',
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 36,
+                    borderColor: '#fff',
+                    // marginHorizontal: 10
+                  },
+                  dateText: {
+                    color: '#fff',
+                    textAlign: 'center',
+                  },
+                  // ... You can check the source to find the other keys.
+                }}
+                onDateChange={(date) => { this.setState({ diaTrab: date }) }}
+              />
+            </View>
+            {/* <--pergunta 06--> */}
+
+            <TouchableOpacity
+              onPress={() => this.cad()}
+              style={styles.botao}
+            >
+              <Text style={styles.textButton}>Finalizar</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // alignItems: 'center',
+    backgroundColor: '#252C4A',
+    width: '100%',
+  },
+  textTrue: {
+    color: '#fff',
+    fontSize: 18,
+    marginTop: 15,
+    textAlign: 'justify'
+  },
+  input: {
+    fontSize: 16,
+    color: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    marginHorizontal: 5,
+    // marginTop: -15
+  },
+  perguntas: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: '100%',
+  },
+  textPerg: {
+    color: '#fff',
+    fontSize: 16,
+    marginLeft: 5,
+    // margin: 1
+    // marginRight: 8
+  },
+  diaTrab: {
+    width: '100%',
+    height: 60,
+    backgroundColor: '#268AEC',
+    marginTop: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  botao: {
+    width: 225,
+    height: 40,
+    backgroundColor: '#268AEC',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+    marginBottom: 20
+  },
+  textButton: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  view: {
+    alignItems: 'center',
+    width: '100%'
+  },
+  viewInput: {
+    height: 45,
+    width: 50,
+    // backgroundColor: '#fff',
+    borderRadius: 8,
+    alignItems: 'center',
+    // marginTop: -,
+    borderBottomWidth: 2,
+    borderColor: '#fff'
+  },
+  logo: {
+    width: 250,
+    height: 200
+  },
+  inic: {
+    width: '100%',
+    alignItems: 'center'
+  }
+})
+
+
+
+{/* <FlatList
+data={list}
+showsVerticalScrollIndicator={false}
+renderItem={({ item }) => (
+  <Text>{item.perguntas1}</Text>
+  <TextInput
+    style={styles.input}
+    autoCorrect={false}
+    autoCapitalize='none'
+    placeholder=''
+    placeholderTextColor='#999'
+    value={this.state.pergunta1}
+    onChangeText={pergunta1 => this.setState({ pergunta1 })}
+  />
+)}
+keyExtractor={(item, index) => index.toString()}
+/> */}
+
+calculo 1
+var s = pergunta3.split(':');
+    // var e = pergunta4.split(':');
+
+    // var end = parseInt(e[0]) * 60 + parseInt(e[1]);
+    var start = parseInt(s[0]) * 60 + parseInt(s[1]);
+    console.log(start)
+    var Sosent = (((start - pergunta4) - 1440) / 60) * -1
+    await console.log(Sosent)
+    var sign = Sosent >= 0 ? 1 : -1;
+    var min = 1 / 60;
+
+    // Get positive value of num
+    Sosent = Sosent * sign;
+
+    // Separate the int from the decimal part
+    var intpart = Math.floor(Sosent);
+    // console.log('Parte inteira', intpart)
+    var decpart = Sosent - intpart;
+    // Round to nearest minute
+    decpart = min * Math.round(decpart / min);
+    // console.log('Parte flutuante', decpart)
+    var minutes = Math.floor(decpart * 60);
+    // console.log('Transformada em minutos', minutes)
+    // Sign result
+    sign = sign == 1 ? '' : '-';
+
+    // pad() adds a leading zero if needed
+    // return sign + intpart + 'h' + pad(minutes, 2);
+    Alert.alert('Primeiro calculo', sign + intpart + 'h' + minutes);

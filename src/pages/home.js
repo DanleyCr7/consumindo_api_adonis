@@ -1,416 +1,168 @@
 import React, { Component } from 'react';
+
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import firebase from 'firebase'
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Alert,
-  ActivityIndicator,
-  Dimensions,
-  Share,
-  ScrollView,
+//IMPORTANDO COMPONENTES E CONFIGURAÇÃO DE COR
+// <------->
+import { Colors } from '../config/colors'
+import { TextButton } from '../components/textButton';
+import { ButtonOpacity } from '../components/buttonOpacity';
+// <------->
 
-} from 'react-native';
-import share from '../../assets/share.png';
-import list from '../../assets/list.png';
-import geral from '../../assets/geral.png';
+import logo from '../../assets/logo.png'
 
-// import { Container } from './styles';
-const { width, height } = Dimensions.get('window');
 export default class pages extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      nome: '',
-    }
-  }
   componentDidMount() {
-    this.props.navigation.setParams({ sair: this.sair });
-  }
-  static navigationOptions = ({ navigation }) => ({
-    // const { params = {} } = navigation.state  
-    headerRight: (
-      <TouchableOpacity style={styles.Sair} onPress={navigation.getParam('sair')} >
-        <Text style={{ color: '#fff', marginHorizontal: 10 }}>Sair</Text>
-      </TouchableOpacity>
-    ),
-  });
-  sair = () => {
-    firebase.auth().signOut()
-      .then(() => {
-        this.props.navigation.replace('Login')
-      }).catch(error => {
-        Alert.alert('Error',
-          'Erro ao sair');
-      });
-  }
-  onShare = async quiz => {
-    try {
-      const { currentUser } = firebase.auth();
-
-      const id = currentUser.uid;
-      const result = await Share.share({
-        message:
-          `https://www.nitlab.com/${quiz}/${id}`,
-      });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAcQ8jTZK6PPeQRKaO2txOmvpbRG7AqHSU",
+      authDomain: "series-3e08b.firebaseapp.com",
+      databaseURL: "https://series-3e08b.firebaseio.com",
+      projectId: "series-3e08b",
+      storageBucket: "",
+      messagingSenderId: "779861796924",
+      appId: "1:779861796924:web:da506c2ada262d605a3b39"
+    };
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-  };
+
+  }
   render() {
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Cronotipo de Munique</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'CronotipoMunique'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'CronotipoMunique'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('munique')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Questionario de Edinburgh</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'Edinburgh'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'Edinburgh'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('edinburgh')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
-          {/* list */}
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Questionario de Beck</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'Beck'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'Beck'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('beck')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
-          {/* list */}
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Questionario de Atenção</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'Atencao'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'Atencao'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('atencao')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
-          {/* list */}
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Questionario de Ansiedade</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'Ansiedade'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'Ansiedade'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('ansiedade')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
-          {/* list */}
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Questionario de Ostberg</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'Ostberg'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'Ostberg'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('ostberg')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
-          {/* list */}
-          <TouchableOpacity style={styles.questions}>
-            <Text style={styles.textQuiz}>Indice de sono Pisttsburgh</Text>
-            <View style={styles.iconQuiz}>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('listAll', {
-                rota: 'Pisttsburgh'
-              })}>
-                <Text style={styles.textIcon}>Lista geral</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={geral}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon} onPress={() => this.props.navigation.navigate('list', {
-                rota: 'Pisttsburgh'
-              })}>
-                <Text style={styles.textIcon}>Minha lista</Text>
-                {/* <Image
-                  style={styles.icon}
-                  source={list}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                /> */}
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.bottonIcon2} onPress={() => this.onShare('pisttsburgh')}>
-                <Image
-                  style={styles.icon}
-                  source={share}
-                  aspectRatio={1}
-                // resizeMode='stretch'
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {/* list */}
+      <View style={styles.container}>
+        <View style={styles.cima}>
+          <Image
+            source={logo}
+            style={styles.logo}
+          />
         </View>
-      </ScrollView>
+        <View style={styles.baixo}>
+          {/* container botao */}
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity style={styles.butto1}>
+              <Text style={styles.textButton}>Principal</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button2}>
+              <Text style={styles.textButton2}>Sobre nós</Text>
+            </TouchableOpacity>
+            {/* container botao */}
+
+          </View>
+          {/* container */}
+          <View style={styles.sobreContainer}>
+            <Text style={styles.textDesc}>Cronotipo de munique</Text>
+            <TouchableOpacity style={styles.buttonSobre}>
+              <Text>Sobre</Text>
+            </TouchableOpacity>
+          </View>
+          {/* container */}
+          <View style={styles.sobreContainer2}>
+            <Text style={styles.textDesc}>Edinburgh</Text>
+            <TouchableOpacity style={styles.buttonSobre}>
+              <Text>Sobre</Text>
+            </TouchableOpacity>
+          </View>
+          {/* container */}
+          <View style={styles.sobreContainer3}>
+            <Text style={styles.textDesc}>Escala 1 de beck</Text>
+            <TouchableOpacity style={styles.buttonSobre}>
+              <Text>Sobre</Text>
+            </TouchableOpacity>
+          </View>
+          {/* container */}
+        </View>
+      </View>
     )
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.CONTAINER,
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#252C4A'
-  },
-  questions: {
-    width: width - 40,
-    height: 100,
-    borderColor: '#3B54B8',
-    borderWidth: 2,
-    borderRadius: 7,
-    marginTop: 15,
-    marginBottom: 15,
-    // flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    // backgroundColor: '#3B54B8'
-  },
-  iconQuiz: {
-    marginTop: 15,
-    flexDirection: 'row',
-    // alignItems: 'center',
-    justifyContent: 'space-between',
-    height: '100%',
-
-  },
-  icon: {
-    width: 20,
-    height: 22,
-    // margin: 1
-  },
-  textQuiz: {
-    fontSize: 18,
-    // fontWeight: 'bold',
-    color: '#fff',
-    marginTop: 18
-    // marginTop: 10,
-    // marginLeft: 20,
-  },
-  bottonIcon: {
-    backgroundColor: '#3B54B8',
-    marginHorizontal: 25,
-    borderRadius: 8,
-    // width: 40,
-    height: 30,
-    alignItems: 'center',
     justifyContent: 'center',
-    borderColor: '#3B54B8',
-    // borderWidth: 1
+    alignItems: 'center'
   },
-  bottonIcon2: {
-    backgroundColor: '#3B54B8',
-    marginHorizontal: 25,
-    borderRadius: 25,
-    width: 35,
-    height: 35,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // marginBottom: 10
-  },
-  textIcon: {
-    margin: 8,
-    color: '#fff'
-  },
-  Sair: {
-    marginRight: 20,
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 8,
-    height: 25,
+  cima: {
+    flex: 1,
+    backgroundColor: '#9D8BFB',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  baixo: {
+    flex: 1.4,
+    backgroundColor: '#fff',
+    width: '100%',
+    alignItems: 'center'
+  },
+  logo: {
+    width: 180,
+    height: 135
+  },
+  butto1: {
+    backgroundColor: '#9D8BFB',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    height: 40,
+    borderRadius: 8
+  },
+  button2: {
+    backgroundColor: '#ECECEC',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    height: 40,
+    borderRadius: 8
+  },
+  textButton: {
+    fontSize: 18,
+    color: '#fff'
+  },
+  textButton2: {
+    fontSize: 18,
+    color: '#000'
+  },
+  sobreContainer: {
+    width: '90%',
+    backgroundColor: '#9D8BFB',
+    height: 70,
+    marginTop: 15,
+    borderRadius: 8
+  },
+  sobreContainer2: {
+    width: '90%',
+    backgroundColor: '#25CED1',
+    height: 70,
+    marginTop: 15,
+    borderRadius: 8
+  },
+  sobreContainer3: {
+    width: '90%',
+    backgroundColor: '#AEB4CE',
+    height: 70,
+    marginTop: 15,
+    borderRadius: 8
+  },
+  buttonSobre: {
+    width: 50,
+    height: 25,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginTop: 10,
+    marginLeft: 15
+  },
+
+  textDesc: {
+    fontSize: 18,
+    marginLeft: 15,
+    color: '#fff',
+    marginTop: 5
   }
+
 })

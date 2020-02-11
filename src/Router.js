@@ -1,62 +1,78 @@
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 import React from 'react';
-import Login from './pages/login';
-import CreateUser from './pages/createUser';
-import listTeste from './pages/listTeste';
-import list from './pages/list';
-import listAll from './pages/listAll';
-import detailMunique from './pages/detailMunique';
-import detail from './pages/detail';
 import home from './pages/home';
-import muniqueGeral from './pages/muniqueGeral';
-import veri from './pages/verificacao';
-
+import CronotipoMunique from './pages/CronotipoMunique';
+import form from './pages/form';
+import Edinburgh from './pages/Edinburgh';
+import beck1 from './pages/Escala1Beck';
+import EscalaAnsiedade from './pages/EscalaAnsiedade';
+import EscalaAtencao from './pages/EscalaAtencao';
+import Ostberg from './pages/Ostberg';
+import Pisttsburgh from './pages/pisttsburgh';
 
 const Router = createStackNavigator({
-  'veri': {
-    screen: veri,
-    navigationOptions: {
-      title: 'Verificação',
-    }
-  },
-  'Login': {
-    screen: Login,
+  'home': {
+    screen: home,
+    path: 'home/:home',
     navigationOptions: {
       title: 'Bem Vindo',
     }
   },
-  'home': {
-    screen: home,
+  'beck1': {
+    screen: beck1,
+    path: 'beck/:beck',
     navigationOptions: {
-      title: 'Home',
+      title: 'Escala 1 de beck',
     }
   },
-
-  'list': {
-    screen: list,
+  'CronotipoMunique': {
+    screen: CronotipoMunique,
+    path: 'munique/:munique',
     navigationOptions: {
-      title: 'Lista',
+      title: 'Escala',
     }
   },
-  'listAll': {
-    screen: listAll,
+  'EscalaAnsiedade': {
+    screen: EscalaAnsiedade,
+    path: 'ansiedade/:ansiedade',
     navigationOptions: {
-      title: 'Lista geral',
+      title: 'Escala de Ansiedade',
     }
   },
-  'CreateUser': {
-    screen: CreateUser,
+  'EscalaAtencao': {
+    screen: EscalaAtencao,
+    path: 'atencao/:atencao',
     navigationOptions: {
-      title: 'Criar Usuario',
+      title: 'Escala de Ansiedade',
     }
   },
-  'detail': {
-    screen: detail,
+  'Ostberg': {
+    screen: Ostberg,
+    path: 'ostberg/:ostberg',
     navigationOptions: {
-      title: 'Detalhes',
+      title: 'Escala Ostberg',
     }
   },
-
+  'form': {
+    screen: form,
+    navigationOptions: {
+      title: 'Formulario',
+    }
+  },
+  'Edinburgh': {
+    screen: Edinburgh,
+    path: 'edinburgh/:edinburgh',
+    navigationOptions: {
+      title: 'Edinburgh',
+    }
+  },
+  'Pisttsburgh': {
+    screen: Pisttsburgh,
+    path: 'pisttsburgh/:pisttsburgh',
+    navigationOptions: {
+      title: 'pisttsburgh',
+    }
+  },
 
 },
   {
@@ -71,5 +87,5 @@ const Router = createStackNavigator({
 
 const prefix = (Platform.OS === 'ios')
   ? 'https://'
-  : 'https://www.google.com/';
+  : 'https://www.nitlab.com/';
 export default () => <Router uriPrefix={prefix} />;
